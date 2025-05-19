@@ -64,12 +64,6 @@ public class KafkaJoinJob {
         DataStream<User> users = env
                 .fromSource(userConsumer, WatermarkStrategy.noWatermarks(), "users-source");
 
-        /*
-        // Check which serializer is used by process
-        TypeInformation<OrderByUser> typeInfo = TypeInformation.of(OrderByUser.class);
-        TypeSerializer<OrderByUser> serializer = typeInfo.createSerializer(env.getConfig().getSerializerConfig());
-        System.out.println(serializer);
-         */
         orders
                 .keyBy(Order::getUserId)
                 .intervalJoin(users.keyBy(User::getUserId))
