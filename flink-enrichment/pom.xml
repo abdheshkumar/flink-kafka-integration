@@ -10,7 +10,7 @@
     <artifactId>flink-enrichment</artifactId>
     <packaging>jar</packaging>
 
-    <name>Flink Walkthrough DataStream Java</name>
+    <name>flink-enrichment</name>
     <url>https://flink.apache.org</url>
 
     <properties>
