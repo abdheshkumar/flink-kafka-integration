@@ -49,3 +49,8 @@ env.getConfig().registerKryoType(OrderByUser.class);
 
 **POJO serialization is 2–5X faster than Kryo.
 Kryo creates more GC pressure.**
+
+## Use avro serialization
+```code
+ConfluentRegistryAvroDeserializationSchema.forSpecific
+```

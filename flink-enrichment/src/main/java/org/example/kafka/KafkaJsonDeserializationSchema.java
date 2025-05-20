@@ -7,14 +7,14 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import java.io.IOException;
 import java.io.Serial;
 
-public class KafkaDeserializationSchema<T> implements DeserializationSchema<T> {
+public class KafkaJsonDeserializationSchema<T> implements DeserializationSchema<T> {
 
     @Serial
     private static final long serialVersionUID = 1L;
     private final Class<T> typeClass;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public KafkaDeserializationSchema(Class<T> typeClass) {
+    public KafkaJsonDeserializationSchema(Class<T> typeClass) {
         this.typeClass = typeClass;
     }
 

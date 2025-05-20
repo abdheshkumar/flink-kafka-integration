@@ -1,11 +1,8 @@
 package org.example.kafka;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.RestOptions;
-import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -15,17 +12,7 @@ import java.time.Duration;
 
 public class KafkaJoinJob {
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment env;
-        boolean isLocal = true; // Set to false for production
-        if (isLocal) {
-            var conf = new Configuration();
-            conf.set(RestOptions.PORT, 8082); // local web UI port
-            //conf.set(TaskManagerOptions.NUM_TASK_SLOTS, 4);
-            //conf.set(TaskManagerOptions.MEMORY_SIZE, "1024m");
-            env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
-        } else {
-            env = StreamExecutionEnvironment.getExecutionEnvironment();
-        }
+        StreamExecutionEnvironment env = StreamExecutionEnvironmentFactory.from(true);
 
         /*
         KafkaSource.builder()
@@ -44,7 +31,7 @@ public class KafkaJoinJob {
                 .setBootstrapServers("localhost:9092")
                 .setTopics("orders")
                 .setGroupId("flink-kafka-group")
-                .setValueOnlyDeserializer(new KafkaDeserializationSchema<>(Order.class))
+                .setValueOnlyDeserializer(new KafkaJsonDeserializationSchema<>(Order.class))
                 .setStartingOffsets(OffsetsInitializer.earliest())
                 .setClientIdPrefix("flink-orders-client")
                 .build();
@@ -53,7 +40,7 @@ public class KafkaJoinJob {
                 .setBootstrapServers("localhost:9092")
                 .setTopics("users")
                 .setGroupId("flink-kafka-group")
-                .setValueOnlyDeserializer(new KafkaDeserializationSchema<>(User.class))
+                .setValueOnlyDeserializer(new KafkaJsonDeserializationSchema<>(User.class))
                 .setStartingOffsets(OffsetsInitializer.earliest())
                 .setClientIdPrefix("flink-users-client")
                 .build();
